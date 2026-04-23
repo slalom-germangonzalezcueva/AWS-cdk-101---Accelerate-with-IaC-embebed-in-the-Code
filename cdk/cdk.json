@@ -1,0 +1,10 @@
+{
+  "app": "npx ts-node --prefer-ts-exts bin/app.ts",
+  "watch": {
+    "include": ["bin", "lib", "../service/src"],
+    "exclude": ["README.md", "cdk*.json", "**/*.js", "**/*.d.ts", "node_modules", "../frontend/dist"]
+  },
+  "context": {
+    "@aws-cdk/core:newStyleStackSynthesis": true
+  }
+}

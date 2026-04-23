@@ -1,0 +1,159 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: GitHub Actions OIDC deploy role scoped to one repository and the CDK CV updater demo resources.
+
+Parameters:
+  GitHubOrg:
+    Type: String
+    Description: GitHub organization or username, for example octo-org.
+  GitHubRepo:
+    Type: String
+    Description: Repository name, for example cdk-cv-updater-crash-course.
+  GitHubBranch:
+    Type: String
+    Default: main
+    Description: Branch allowed to deploy.
+  DemoStackName:
+    Type: String
+    Default: CdkCvUpdaterDemoStack
+  CdkToolkitStackName:
+    Type: String
+    Default: CDKToolkit
+
+Resources:
+  GitHubOidcProvider:
+    Type: AWS::IAM::OIDCProvider
+    Properties:
+      Url: https://token.actions.githubusercontent.com
+      ClientIdList:
+        - sts.amazonaws.com
+      ThumbprintList:
+        - 6938fd4d98bab03faadb97b34396831e3780aea1
+
+  GitHubCdkDeployRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub github-cdk-cv-updater-${GitHubRepo}-${GitHubBranch}
+      Description: Allows a single GitHub repository branch to deploy the CDK CV updater demo using OIDC.
+      MaxSessionDuration: 3600
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Federated: !Ref GitHubOidcProvider
+            Action: sts:AssumeRoleWithWebIdentity
+            Condition:
+              StringEquals:
+                token.actions.githubusercontent.com:aud: sts.amazonaws.com
+              StringLike:
+                token.actions.githubusercontent.com:sub: !Sub repo:${GitHubOrg}/${GitHubRepo}:ref:refs/heads/${GitHubBranch}
+      Policies:
+        - PolicyName: cdk-cv-updater-deploy-policy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Sid: CloudFormationForDemoStacks
+                Effect: Allow
+                Action:
+                  - cloudformation:CreateChangeSet
+                  - cloudformation:CreateStack
+                  - cloudformation:DeleteChangeSet
+                  - cloudformation:DeleteStack
+                  - cloudformation:DescribeChangeSet
+                  - cloudformation:DescribeStackEvents
+                  - cloudformation:DescribeStackResources
+                  - cloudformation:DescribeStacks
+                  - cloudformation:ExecuteChangeSet
+                  - cloudformation:GetTemplate
+                  - cloudformation:GetTemplateSummary
+                  - cloudformation:UpdateStack
+                  - cloudformation:ValidateTemplate
+                Resource:
+                  - !Sub arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/${DemoStackName}/*
+                  - !Sub arn:${AWS::Partition}:cloudformation:${AWS::Region}:${AWS::AccountId}:stack/${CdkToolkitStackName}/*
+              - Sid: ReadCdkBootstrapParameters
+                Effect: Allow
+                Action:
+                  - ssm:GetParameter
+                  - ssm:GetParameters
+                Resource: !Sub arn:${AWS::Partition}:ssm:${AWS::Region}:${AWS::AccountId}:parameter/cdk-bootstrap/*
+              - Sid: PublishCdkAssetsToBootstrapBucket
+                Effect: Allow
+                Action:
+                  - s3:GetBucketLocation
+                  - s3:GetObject
+                  - s3:ListBucket
+                  - s3:PutObject
+                  - s3:DeleteObject
+                Resource:
+                  - !Sub arn:${AWS::Partition}:s3:::cdk-*-assets-${AWS::AccountId}-${AWS::Region}
+                  - !Sub arn:${AWS::Partition}:s3:::cdk-*-assets-${AWS::AccountId}-${AWS::Region}/*
+              - Sid: ManageDemoRuntimeResources
+                Effect: Allow
+                Action:
+                  - apigateway:*
+                  - lambda:AddPermission
+                  - lambda:CreateFunction
+                  - lambda:DeleteFunction
+                  - lambda:GetFunction
+                  - lambda:GetFunctionConfiguration
+                  - lambda:ListTags
+                  - lambda:RemovePermission
+                  - lambda:TagResource
+                  - lambda:UntagResource
+                  - lambda:UpdateFunctionCode
+                  - lambda:UpdateFunctionConfiguration
+                  - dynamodb:CreateTable
+                  - dynamodb:DeleteTable
+                  - dynamodb:DescribeTable
+                  - dynamodb:DescribeContinuousBackups
+                  - dynamodb:DescribeTimeToLive
+                  - dynamodb:ListTagsOfResource
+                  - dynamodb:TagResource
+                  - dynamodb:UntagResource
+                  - dynamodb:UpdateContinuousBackups
+                  - dynamodb:UpdateTable
+                  - s3:CreateBucket
+                  - s3:DeleteBucket
+                  - s3:DeleteBucketPolicy
+                  - s3:GetBucket*
+                  - s3:GetEncryptionConfiguration
+                  - s3:GetLifecycleConfiguration
+                  - s3:GetObject
+                  - s3:ListBucket
+                  - s3:PutBucket*
+                  - s3:PutEncryptionConfiguration
+                  - s3:PutLifecycleConfiguration
+                  - s3:PutObject
+                  - s3:DeleteObject
+                  - logs:CreateLogGroup
+                  - logs:DeleteLogGroup
+                  - logs:DescribeLogGroups
+                  - logs:PutRetentionPolicy
+                Resource: '*'
+              - Sid: ManageDemoIamRoles
+                Effect: Allow
+                Action:
+                  - iam:AttachRolePolicy
+                  - iam:CreateRole
+                  - iam:DeleteRole
+                  - iam:DeleteRolePolicy
+                  - iam:DetachRolePolicy
+                  - iam:GetRole
+                  - iam:GetRolePolicy
+                  - iam:PassRole
+                  - iam:PutRolePolicy
+                  - iam:TagRole
+                  - iam:UntagRole
+                  - iam:UpdateAssumeRolePolicy
+                Resource:
+                  - !Sub arn:${AWS::Partition}:iam::${AWS::AccountId}:role/${DemoStackName}-*
+                  - !Sub arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-*-deploy-role-${AWS::AccountId}-${AWS::Region}
+                  - !Sub arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-*-file-publishing-role-${AWS::AccountId}-${AWS::Region}
+                  - !Sub arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-*-lookup-role-${AWS::AccountId}-${AWS::Region}
+                  - !Sub arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-*-cfn-exec-role-${AWS::AccountId}-${AWS::Region}
+
+Outputs:
+  RoleArn:
+    Description: Store this as GitHub secret AWS_GITHUB_DEPLOY_ROLE_ARN.
+    Value: !GetAtt GitHubCdkDeployRole.Arn
