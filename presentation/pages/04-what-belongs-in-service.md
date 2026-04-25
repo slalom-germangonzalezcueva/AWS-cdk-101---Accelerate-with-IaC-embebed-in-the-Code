@@ -1,0 +1,30 @@
+# What belongs in service?
+
+Lambda handlers, validation, AWS SDK calls, application types.
+
+```
+.
+└── service
+    ├── package.json
+    ├── src
+    │   ├── images
+    │   │   └── create-upload-url.ts
+    │   ├── items
+    │   │   ├── create.ts
+    │   │   ├── delete.ts
+    │   │   ├── list.ts
+    │   │   └── update.ts
+    │   ├── profile
+    │   │   ├── get.ts
+    │   │   ├── summary.example.ts
+    │   │   └── update.ts
+    │   └── shared
+    │       ├── dynamo.ts
+    │       ├── response.ts
+    │       └── types.ts
+    └── tsconfig.json
+```
+
+<div class="abs-br m-6 text-xl">
+  <img src="/assets/Isolated_slalom-White_S-300x300.png" alt="Slalom" width="32" height="32">
+</div>

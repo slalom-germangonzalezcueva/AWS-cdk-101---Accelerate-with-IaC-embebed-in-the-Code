@@ -1,8 +1,8 @@
 {
-  "name": "cdk-cv-updater-crash-course",
+  "name": "aws-cdk-101",
   "version": "1.0.0",
   "private": true,
-  "description": "One-hour AWS CDK TypeScript crash course demo with separated application and IaC folders.",
+  "description": "AWS CDK TypeScript crash course demo with separated application and IaC folders.",
   "scripts": {
     "install:all": "npm --prefix service install && npm --prefix cdk install && npm --prefix frontend install",
     "service:build": "npm --prefix service run build",
