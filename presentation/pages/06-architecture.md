@@ -2,11 +2,11 @@
 
 ```mermaid {theme: 'neutral', scale: 0.8}
 graph TD
-B[Browser] --> C[S3 Frontend]
-C --> D[API Geteway]
-D --> E[Lambda]
-E --> F[DybamoDB]
-E --> G[S3]
+B[Browser] --> C[CloudFront]
+D[S3 Bucket Front] --> C
+C <--> E[API Geteway]
+E --> F[Lambda]
+E --> G[DybamoDB]
 ```
 
 <div class="abs-br m-6 text-xl">

@@ -2,6 +2,7 @@
 
 - DynamoDB Table
 - S3 Bucket
+- CloudFront
 - RestApi
 - NodejsFunction
 - IAM grants

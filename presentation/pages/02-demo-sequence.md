@@ -6,7 +6,7 @@ We are going to deploy a simple application to maintain my own <i>curriculm vita
 
 ### What is included in the demo?
 
-S3, API Gateway, Lambda, DynamoDB, React frontend, GitHub OIDC
+S3, CloudFront, API Gateway, Lambda, DynamoDB, React frontend, GitHub OIDC
 
 ### What is NOT inlcuded?
 

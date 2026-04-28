@@ -7,6 +7,7 @@
     "install:all": "pnpm --prefix service install && pnpm --prefix cdk install && pnpm --prefix frontend install",
     "service:build": "pnpm --prefix service run build",
     "frontend:build": "pnpm --prefix frontend run build",
+    "cdk:bootstrap": "pnpm --prefix cdk run bootstrap",
     "cdk:build": "pnpm --prefix cdk run build",
     "build": "pnpm run service:build && pnpm run frontend:build && pnpm run cdk:build",
     "synth": "pnpm run frontend:build && pnpm --prefix cdk run synth",

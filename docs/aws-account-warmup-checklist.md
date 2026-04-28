@@ -15,7 +15,7 @@ Use this before the Teams session so the live demo focuses on CDK, not account p
 
 ```bash
 node --version      # recommend 22+
-npm --version
+pnpm --version
 aws --version       # AWS CLI v2
 npx cdk --version   # CDK v2
 ```
@@ -25,6 +25,8 @@ npx cdk --version   # CDK v2
 Use SSO or a temporary admin session only for one-time setup:
 
 ```bash
+export AWS_PROFILE=aws-innovationlabs-gdl
+aws-azure-login --mode gui --profile $AWS_PROFILE
 aws sts get-caller-identity
 aws configure get region
 ```
@@ -34,13 +36,13 @@ aws configure get region
 CDK needs a bootstrap stack named `CDKToolkit`. It creates the CDK asset bucket used for Lambda bundles and frontend assets.
 
 ```bash
-cdk bootstrap aws://<ACCOUNT_ID>/<REGION>
+pnpm run cdk:bootstrap
 ```
 
 Validate:
 
 ```bash
-aws cloudformation describe-stacks --stack-name CDKToolkit --region <REGION>
+aws cloudformation describe-stacks --stack-name CDKToolkit --region $(aws configure get region)
 aws s3 ls | grep cdk-
 ```
 
@@ -50,22 +52,45 @@ Deploy the provided bootstrap template:
 
 ```bash
 aws cloudformation deploy \
-  --stack-name github-oidc-cdk-cv-updater \
+  --stack-name lab-aws-cdk-101-github-oidc-stack \
   --template-file bootstrap/github-oidc-deploy-role.yaml \
   --capabilities CAPABILITY_NAMED_IAM \
   --parameter-overrides \
-    GitHubOrg=<GITHUB_ORG> \
-    GitHubRepo=<GITHUB_REPO> \
+    GitHubOrg=slalom-germangonzalezcueva \
+    GitHubRepo=AWS-cdk-101---Accelerate-with-IaC-embebed-in-the-Code \
     GitHubBranch=main \
     DemoStackName=lab-aws-cdk-101-stack \
-  --region <REGION>
+  --region us-east-1
+```
+
+If error because the OIDC Identy already exists then run:
+
+```bash
+# Get the ARN and copy
+aws iam list-open-id-connect-providers --query OpenIDConnectProviderList --output text
+
+# Delete previous stack if needed
+aws cloudformation delete-stack --stack-name lab-aws-cdk-101-github-oidc-stack
+
+# We are using the template with the OIDC override
+aws cloudformation deploy \
+  --stack-name lab-aws-cdk-101-github-oidc-stack \
+  --template-file bootstrap/github-exist-oidc-deploy-role.yaml \
+  --capabilities CAPABILITY_NAMED_IAM \
+  --parameter-overrides \
+    GitHubOidcProviderArn=arn:aws:iam::363509146455:oidc-provider/token.actions.githubusercontent.com \
+    GitHubOrg=slalom-germangonzalezcueva \
+    GitHubRepo=AWS-cdk-101---Accelerate-with-IaC-embebed-in-the-Code \
+    GitHubBranch=main \
+    DemoStackName=lab-aws-cdk-101-stack \
+  --region us-east-1
 ```
 
 Capture the output:
 
 ```bash
 aws cloudformation describe-stacks \
-  --stack-name github-oidc-cdk-cv-updater \
+  --stack-name lab-aws-cdk-101-github-oidc-stack \
   --query "Stacks[0].Outputs[?OutputKey=='RoleArn'].OutputValue" \
   --output text
 ```
