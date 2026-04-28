@@ -9,7 +9,7 @@ Use this before the Teams session so the live demo focuses on CDK, not account p
 - GitHub org/user: `<GITHUB_ORG>`
 - GitHub repo: `<GITHUB_REPO>`
 - Branch that can deploy: `main`
-- CDK stack name: `CdkCvUpdaterDemoStack`
+- CDK stack name: `lab-aws-cdk-101-stack`
 
 ## 2. Install tools locally
 
@@ -57,7 +57,7 @@ aws cloudformation deploy \
     GitHubOrg=<GITHUB_ORG> \
     GitHubRepo=<GITHUB_REPO> \
     GitHubBranch=main \
-    DemoStackName=CdkCvUpdaterDemoStack \
+    DemoStackName=lab-aws-cdk-101-stack \
   --region <REGION>
 ```
 
@@ -80,7 +80,7 @@ Create GitHub repository secret:
 The deploy role is scoped to:
 
 - GitHub OIDC trust for one org/repo/branch.
-- CloudFormation changes for `CdkCvUpdaterDemoStack` and `CDKToolkit`.
+- CloudFormation changes for `lab-aws-cdk-101-stack` and `CDKToolkit`.
 - CDK bootstrap asset bucket access matching `cdk-*-assets-<account>-<region>`.
 - Demo services: API Gateway, Lambda, DynamoDB, S3, CloudWatch Logs.
 - IAM role creation/pass-role only for stack-generated roles and CDK bootstrap roles.

@@ -4,15 +4,19 @@
   "private": true,
   "description": "AWS CDK TypeScript crash course demo with separated application and IaC folders.",
   "scripts": {
-    "install:all": "npm --prefix service install && npm --prefix cdk install && npm --prefix frontend install",
-    "service:build": "npm --prefix service run build",
-    "frontend:build": "npm --prefix frontend run build",
-    "cdk:build": "npm --prefix cdk run build",
-    "build": "npm run service:build && npm run frontend:build && npm run cdk:build",
-    "synth": "npm run frontend:build && npm --prefix cdk run synth",
-    "diff": "npm run frontend:build && npm --prefix cdk run diff",
-    "deploy": "npm run frontend:build && npm --prefix cdk run deploy",
-    "destroy": "npm --prefix cdk run destroy",
-    "test:static": "npm run build && npm run synth"
+    "install:all": "pnpm --prefix service install && pnpm --prefix cdk install && pnpm --prefix frontend install",
+    "service:build": "pnpm --prefix service run build",
+    "frontend:build": "pnpm --prefix frontend run build",
+    "cdk:build": "pnpm --prefix cdk run build",
+    "build": "pnpm run service:build && pnpm run frontend:build && pnpm run cdk:build",
+    "synth": "pnpm run frontend:build && pnpm --prefix cdk run synth",
+    "diff": "pnpm run frontend:build && pnpm --prefix cdk run diff",
+    "deploy": "pnpm run frontend:build && pnpm --prefix cdk run deploy",
+    "destroy": "pnpm --prefix cdk run destroy",
+    "test:static": "pnpm run build && pnpm run synth"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "esbuild": "^0.28.0"
   }
 }

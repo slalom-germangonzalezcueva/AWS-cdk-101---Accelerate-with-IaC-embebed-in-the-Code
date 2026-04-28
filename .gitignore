@@ -1,0 +1,6 @@
+node_modules/
+cdk/node_modules/
+frontend/node_modules/
+service/node_modules/
+cdk/cdk.out/
+frontend/dist/

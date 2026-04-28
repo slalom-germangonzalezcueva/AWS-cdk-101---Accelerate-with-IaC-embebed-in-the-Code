@@ -14,7 +14,7 @@ Parameters:
     Description: Branch allowed to deploy.
   DemoStackName:
     Type: String
-    Default: CdkCvUpdaterDemoStack
+    Default: lab-aws-cdk-101-stack
   CdkToolkitStackName:
     Type: String
     Default: CDKToolkit
