@@ -1,3 +1,6 @@
+// import Modal from 'react-modal';
+// import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+// import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
@@ -34,6 +37,9 @@ function App() {
   const [items, setItems] = useState<CvItem[]>([]);
   const [draft, setDraft] = useState({ type: 'skill', title: '', subtitle: '', description: '' });
   const [message, setMessage] = useState('Paste the API URL output from CDK deploy to start.');
+  /* Uncomment for Live Excersise */
+  /* const [summaryOpen, setSummaryOpen] = useState(false);
+  const [summaryJson, setSummaryJson] = useState(''); */
 
   const baseUrl = useMemo(() => (apiUrl ? normalizeApiUrl(apiUrl) : ''), [apiUrl]);
 
@@ -102,6 +108,20 @@ function App() {
     setMessage(`Uploaded profile image to S3 key: ${response.key}. Save profile to persist the key.`);
   }
 
+  /* Uncomment for Live Excersise */
+  /* async function viewSummary() {
+    try {
+      const summary = await request<any>('profile/summary', {
+        method: 'GET',
+      });
+
+      setSummaryJson(JSON.stringify(summary, null, 2));
+      setSummaryOpen(true);
+    } catch (error) {
+      setMessage(`Could not load summary: ${String(error)}`);
+    }
+  } */
+
   return (
     <main className="shell">
       <section className="hero">
@@ -129,6 +149,8 @@ function App() {
           <input type="file" accept="image/*" onChange={(e) => e.target.files?.[0] && uploadImage(e.target.files[0])} />
           {profile.imageKey && <small>S3 image key: {profile.imageKey}</small>}
           <button onClick={saveProfile}>Save profile</button>
+          {/* Uncomment for Live Excersise */}
+          {/* <button onClick={viewSummary}>View Summary</button> */}
         </article>
 
         <article className="panel">
@@ -164,8 +186,56 @@ function App() {
           ))}
         </div>
       </section>
+
+      {/* Uncomment for Live Excersise */}
+      {/* <Modal
+        isOpen={summaryOpen}
+        onRequestClose={() => setSummaryOpen(false)}
+        contentLabel="Profile Summary"
+        style={{
+          content: {
+            background: '#0f172a',
+            color: '#fff',
+            border: '1px solid #334155',
+            borderRadius: '12px',
+            inset: '10%',
+            padding: '24px',
+          },
+          overlay: {
+            backgroundColor: 'rgba(0,0,0,0.75)',
+            zIndex: 9999,
+          },
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginBottom: '16px',
+          }}
+        >
+          <h2>Generated CV Summary</h2>
+
+          <button onClick={() => setSummaryOpen(false)}>
+            Close
+          </button>
+        </div>
+
+        <SyntaxHighlighter
+          language="json"
+          style={oneDark}
+          customStyle={{
+            borderRadius: '8px',
+            fontSize: '0.9rem',
+          }}
+        >
+          {summaryJson}
+        </SyntaxHighlighter>
+      </Modal> */}
     </main>
   );
 }
 
+// Modal.setAppElement('#root');
 createRoot(document.getElementById('root')!).render(<App />);

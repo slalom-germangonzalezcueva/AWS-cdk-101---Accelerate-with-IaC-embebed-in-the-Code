@@ -9,7 +9,7 @@
 
 ### Resources
 
-[AWS CDK](https://aws.amazon.com/cdk/) | [TypeScript](https://www.typescriptlang.org)
+[AWS CDK](https://aws.amazon.com/cdk/) | [AWS CDK Constructs](https://docs.aws.amazon.com/cdk/v2/guide/constructs.html) | [TypeScript](https://www.typescriptlang.org)
 
 ### Contact
 

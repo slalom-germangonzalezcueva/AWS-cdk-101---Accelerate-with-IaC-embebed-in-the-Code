@@ -5,6 +5,9 @@ coverBackgroundUrl: /assets/Background_Technology_CircuitBoard_Horizontal.webp
 title: AWS CDK 101 for Cloud Build
 class: text-center
 transition: slide-left
+fonts:
+  sans: 'Slalom Sans,Helvetica Neue,Robot'
+  local: Slalom Sans
 ---
 
 # AWS CDK 101 for Cloud Build
@@ -71,9 +74,36 @@ image: ./assets/Background_RealEstate_BluePrint01_Vertical.webp
 ---
 class: text-left
 layout: image-left
-src: ./pages/08-cdk-stack-walkthrough.md
+src: ./pages/08-a-cdk-stack-walkthrough.md
 transition: slide-up
 image: ./assets/Background_Public Sector_BridgeBlue01_Vertical.webp
+---
+
+
+---
+class: text-left
+layout: image-right
+src: ./pages/08-b-cdk-stack-constructs.md
+transition: slide-up
+image: ./assets/Background_Public_Sector_Columns01_Vertical.webp
+---
+
+
+---
+src: ./pages/08-c-cdk-stack-constructs-l1.md
+transition: slide-up
+---
+
+
+---
+src: ./pages/08-d-cdk-stack-constructs-l2.md
+transition: slide-up
+---
+
+
+---
+src: ./pages/08-e-cdk-stack-constructs-l3.md
+transition: slide-up
 ---
 
 
