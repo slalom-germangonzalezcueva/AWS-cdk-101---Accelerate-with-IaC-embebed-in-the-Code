@@ -114,13 +114,13 @@ transition: slide-up
 
 
 ---
-src: ./pages/10-local-workflow.md
+src: ./pages/10-aws-account-warm-up.md
 transition: slide-up
 ---
 
 
 ---
-src: ./pages/11-aws-account-warm-up.md
+src: ./pages/11-local-workflow.md
 transition: slide-up
 ---
 
