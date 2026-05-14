@@ -154,9 +154,9 @@ export class AwsCdkCrashCourseStack extends cdk.Stack {
     profileImageUrl.addMethod('POST', new apigateway.LambdaIntegration(profileImageUrlFn));
 
     // Optional convenience endpoint for the live exercise. Uncomment and deploy after creating service/src/profile/summary.ts.
-    // const summaryFn = createNodeFunction('GetCvSummaryFunction', 'profile/summary.ts');
-    // itemsTable.grantReadData(summaryFn);
-    // profile.addResource('summary').addMethod('GET', new apigateway.LambdaIntegration(summaryFn));
+    const summaryFn = createNodeFunction('GetCvSummaryFunction', 'profile/summary.ts');
+    itemsTable.grantReadData(summaryFn);
+    profile.addResource('summary').addMethod('GET', new apigateway.LambdaIntegration(summaryFn));
 
     new s3deploy.BucketDeployment(this, 'DeployFrontend', {
       sources: [s3deploy.Source.asset(path.join(repoRoot, 'frontend', 'dist'))],

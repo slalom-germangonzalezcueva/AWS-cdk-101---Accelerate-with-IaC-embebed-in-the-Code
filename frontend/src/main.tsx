@@ -1,6 +1,6 @@
-// import Modal from 'react-modal';
-// import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-// import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import Modal from 'react-modal';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import React, { useEffect, useMemo, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import './styles.css';
@@ -38,8 +38,8 @@ function App() {
   const [draft, setDraft] = useState({ type: 'skill', title: '', subtitle: '', description: '' });
   const [message, setMessage] = useState('Paste the API URL output from CDK deploy to start.');
   /* Uncomment for Live Excersise */
-  /* const [summaryOpen, setSummaryOpen] = useState(false);
-  const [summaryJson, setSummaryJson] = useState(''); */
+  const [summaryOpen, setSummaryOpen] = useState(false);
+  const [summaryJson, setSummaryJson] = useState('');
 
   const baseUrl = useMemo(() => (apiUrl ? normalizeApiUrl(apiUrl) : ''), [apiUrl]);
 
@@ -109,7 +109,7 @@ function App() {
   }
 
   /* Uncomment for Live Excersise */
-  /* async function viewSummary() {
+  async function viewSummary() {
     try {
       const summary = await request<any>('profile/summary', {
         method: 'GET',
@@ -120,7 +120,7 @@ function App() {
     } catch (error) {
       setMessage(`Could not load summary: ${String(error)}`);
     }
-  } */
+  }
 
   return (
     <main className="shell">
@@ -150,7 +150,7 @@ function App() {
           {profile.imageKey && <small>S3 image key: {profile.imageKey}</small>}
           <button onClick={saveProfile}>Save profile</button>
           {/* Uncomment for Live Excersise */}
-          {/* <button onClick={viewSummary}>View Summary</button> */}
+          <button onClick={viewSummary}>View Summary</button>
         </article>
 
         <article className="panel">
@@ -188,7 +188,7 @@ function App() {
       </section>
 
       {/* Uncomment for Live Excersise */}
-      {/* <Modal
+      <Modal
         isOpen={summaryOpen}
         onRequestClose={() => setSummaryOpen(false)}
         contentLabel="Profile Summary"
@@ -232,10 +232,10 @@ function App() {
         >
           {summaryJson}
         </SyntaxHighlighter>
-      </Modal> */}
+      </Modal>
     </main>
   );
 }
 
-// Modal.setAppElement('#root');
+Modal.setAppElement('#root');
 createRoot(document.getElementById('root')!).render(<App />);
