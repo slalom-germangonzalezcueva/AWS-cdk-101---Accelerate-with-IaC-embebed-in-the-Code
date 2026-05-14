@@ -56,5 +56,10 @@ jobs:
       - name: Diff CDK
         run: pnpm run diff
 
-      - name: Deploy
-        run: pnpm run deploy
+      - name: Deploy and capture outputs
+        run: pnpm run deploy | tee deploy.log
+
+      - name: Append CDK outputs to summary
+        run: |
+          echo '### CDK Outputs' >> $GITHUB_STEP_SUMMARY
+          awk '/Outputs:/,0' deploy.log >> $GITHUB_STEP_SUMMARY
